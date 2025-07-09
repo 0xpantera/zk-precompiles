@@ -29,12 +29,12 @@ The only expensive primitive required is the modular inverse, obtained with the 
 
 ## Precompiles Used
 
-| Address | Opcode   | Purpose                                                      | Used |
-|---------|----------|--------------------------------------------------------------|------|
-| 0x05    | `modexp` | `base^exp mod mod` – used to compute inverses `a^(r‑2)`      | ✅ |
-| 0x06    | `ecAdd`  | Point addition on BN‑254 G1                                  | — |
-| 0x07    | `ecMul`  | Scalar multiplication on BN‑254 G1                           | — |
-| 0x08    | `ecPairing` | Pairing check for zk‑SNARK verification                   | — |
+| Address | Opcode   | Purpose                                                      |
+|---------|----------|--------------------------------------------------------------|
+| 0x05    | `modexp` | `base^exp mod mod` – used to compute inverses `a^(r‑2)`      |
+| 0x06    | `ecAdd`  | Point addition on BN‑254 G1                                  |
+| 0x07    | `ecMul`  | Scalar multiplication on BN‑254 G1                           |
+| 0x08    | `ecPairing` | Pairing check for zk‑SNARK verification                   |
 
 ---
 
@@ -94,8 +94,9 @@ mox test
 ## References
 
 * **EIP‑196 / 197** – BN‑254 precompiles  
-* **Arkworks `ark_bn254`**, **Substrate `bn` crate** – curve libraries  
-* RareSkills ZK – origin of the assignment
+* [Arkworks](https://github.com/arkworks-rs/algebra) `ark_bn254`
+* [Substrate](https://github.com/m-kus/substrate-bn-sp1) `bn`
+* [RareSkills ZK](https://www.rareskills.io/zk-book) – origin of the assignment
 
 ```
 
