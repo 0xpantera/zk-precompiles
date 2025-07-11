@@ -1,4 +1,4 @@
-from script.deploy import deploy
+from script.deploy_rational_adder import deploy_rational_adder
 import pytest
 from hypothesis import assume, given, strategies as st
 
@@ -15,7 +15,7 @@ def rational_adder():
     """
     Deploy the compiled Vyper contract once for the entire module.
     """
-    return deploy()
+    return deploy_rational_adder()
 
 
 # ---------------------------------------------------------------------------
