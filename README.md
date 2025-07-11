@@ -1,8 +1,19 @@
-# Rational Adder (BN-254)
+# BN-254 ZK Precompile Playground
 
-A tiny Vyper contract that verifies, inside the scalar field of the BN‑254 curve, that two secret rational numbers add up to a public rational number – without revealing the summands themselves.
+This repo contains two small Vyper contracts that show how to use the
+Byzantium BN-254 precompiles to validate algebraic statements on-chain
+without revealing secret scalars.
 
-```
+| Contract | Purpose | Core precompiles |
+|----------|---------|------------------|
+| **`rational_adder.vy`** | Verify that two hidden rationals add up to a public one (`x₁/y₁ + x₂/y₂ = num/den`). | `modexp 0x05` |
+| **`ec_matmul.vy`** | Verify that an **n × n** matrix times a hidden vector of G1 points equals a public scalar vector (`M·s = o`). | `ecMul 0x07`, `ecAdd 0x06` |
+
+## Contract Summaries
+
+### 1. `rational_adder.vy`
+
+```text
 A = (x₁ , y₁)    →  r₁ = x₁ · y₁⁻¹   (mod r)
 B = (x₂ , y₂)    →  r₂ = x₂ · y₂⁻¹   (mod r)
 
@@ -10,7 +21,13 @@ Assertion checked on-chain:
         r₁ + r₂  ≟  num · den⁻¹      (mod r)
 ```
 
-The only expensive primitive required is the modular inverse, obtained with the Byzantium-era `modexp` precompile at address `0x05`.
+### 2. `ec_matmul.vy`
+
+```text
+Input:  M (n×n scalars),  s (n G1 pts = [sᵢ]G),  o (n scalars)
+Goal :  M·s = o      element-wise
+Check:  ∑ⱼ Mᵢⱼ·sⱼ   ?=  oᵢ·G    for each row i
+```
 
 ---
 
@@ -29,12 +46,12 @@ The only expensive primitive required is the modular inverse, obtained with the 
 
 ## Precompiles Used
 
-| Address | Opcode   | Purpose                                                      | Used |
-|---------|----------|--------------------------------------------------------------|------|
-| 0x05    | `modexp` | `base^exp mod mod` – used to compute inverses `a^(r‑2)`      | ✅ |
-| 0x06    | `ecAdd`  | Point addition on BN‑254 G1                                  | — |
-| 0x07    | `ecMul`  | Scalar multiplication on BN‑254 G1                           | — |
-| 0x08    | `ecPairing` | Pairing check for zk‑SNARK verification                   | — |
+| Address | Opcode   | Purpose                                                      |
+|---------|----------|--------------------------------------------------------------|
+| 0x05    | `modexp` | `base^exp mod mod` – used to compute inverses `a^(r‑2)`      |
+| 0x06    | `ecAdd`  | Point addition on BN‑254 G1                                  |
+| 0x07    | `ecMul`  | Scalar multiplication on BN‑254 G1                           |
+| 0x08    | `ecPairing` | Pairing check for zk‑SNARK verification                   |
 
 ---
 
